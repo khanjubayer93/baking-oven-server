@@ -72,13 +72,21 @@ async function conndeDB() {
         })
 
         // review api
-        app.put('/reviews/:id', async (req, res) => {
-            const id = req.params.id;
-            const query = { _id: new ObjectId(id) };
-            const result = await reviewCollection.insertOne(query);
+        app.post('/reviews', async (req, res) => {
+            const review = req.body;
+            const result = await reviewCollection.insertOne(review);
             res.send(result)
-            console.log(result)
         });
+
+        app.get('/reviews/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = {
+                product: id
+            }
+            const result = await reviewCollection.find(query).toArray();
+            res.send(result)
+        });
+
 
         // orders api
         app.post('/services', async (req, res) => {
